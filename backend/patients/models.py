@@ -40,7 +40,7 @@ class Patient(models.Model):
     first_name = models.CharField(max_length=100, blank=True)
     last_name = models.CharField(max_length=100)
     date_of_birth = models.DateField()
-    email = models.EmailField()
+    email = models.EmailField(unique=True)
     phone = models.CharField(max_length=20, blank=True)
     address = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)

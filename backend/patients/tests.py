@@ -174,6 +174,20 @@ class PatientAPITest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn('email', response.data)
     
+    def test_create_patient_duplicate_email(self):
+        """Test creating patient with duplicate email fails."""
+        url = reverse('patient-list')
+        data = {
+            'clinic': self.clinic.id,
+            'first_name': 'Duplicate',
+            'last_name': 'User',
+            'date_of_birth': '1995-03-10',
+            'email': 'john.doe@example.com',
+        }
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('email', response.data)
+    
     def test_retrieve_patient(self):
         """Test retrieving a specific patient."""
         url = reverse('patient-detail', kwargs={'pk': self.patient.id})
