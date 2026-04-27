@@ -28,8 +28,9 @@ describe('PatientForm', () => {
     );
     
     expect(screen.getByRole('heading', { name: 'Add Patient' })).toBeInTheDocument();
-    expect(screen.getByLabelText('First Name *')).toHaveValue('');
+    expect(screen.getByLabelText('First Name')).toHaveValue('');
     expect(screen.getByLabelText('Last Name *')).toHaveValue('');
+    expect(screen.getByLabelText('Email *')).toHaveValue('');
   });
 
   it('renders edit patient form with patient data', () => {
@@ -42,10 +43,10 @@ describe('PatientForm', () => {
     );
     
     expect(screen.getByRole('heading', { name: 'Edit Patient' })).toBeInTheDocument();
-    expect(screen.getByLabelText('First Name *')).toHaveValue('John');
+    expect(screen.getByLabelText('First Name')).toHaveValue('John');
     expect(screen.getByLabelText('Last Name *')).toHaveValue('Doe');
     expect(screen.getByLabelText('Date of Birth *')).toHaveValue('1990-01-15');
-    expect(screen.getByLabelText('Email')).toHaveValue('john.doe@example.com');
+    expect(screen.getByLabelText('Email *')).toHaveValue('john.doe@example.com');
   });
 
   it('shows validation errors for required fields', () => {
@@ -60,9 +61,29 @@ describe('PatientForm', () => {
     
     fireEvent.click(screen.getByRole('button', { name: /add patient/i }));
     
-    expect(screen.getByText('First name is required')).toBeInTheDocument();
     expect(screen.getByText('Last name is required')).toBeInTheDocument();
     expect(screen.getByText('Date of birth is required')).toBeInTheDocument();
+    expect(screen.getByText('Email is required')).toBeInTheDocument();
+    expect(onSubmit).not.toHaveBeenCalled();
+  });
+
+  it('shows validation error for invalid email format', () => {
+    const onSubmit = vi.fn();
+    render(
+      <PatientForm
+        patient={null}
+        onSubmit={onSubmit}
+        onCancel={() => {}}
+      />
+    );
+    
+    fireEvent.change(screen.getByLabelText('Last Name *'), { target: { value: 'Smith' } });
+    fireEvent.change(screen.getByLabelText('Date of Birth *'), { target: { value: '1985-05-20' } });
+    fireEvent.change(screen.getByLabelText('Email *'), { target: { value: 'invalid-email' } });
+    
+    fireEvent.click(screen.getByRole('button', { name: /add patient/i }));
+    
+    expect(screen.getByText('Please enter a valid email address')).toBeInTheDocument();
     expect(onSubmit).not.toHaveBeenCalled();
   });
 
@@ -76,10 +97,36 @@ describe('PatientForm', () => {
       />
     );
     
-    fireEvent.change(screen.getByLabelText('First Name *'), { target: { value: 'Jane' } });
     fireEvent.change(screen.getByLabelText('Last Name *'), { target: { value: 'Smith' } });
     fireEvent.change(screen.getByLabelText('Date of Birth *'), { target: { value: '1985-05-20' } });
-    fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'jane@example.com' } });
+    fireEvent.change(screen.getByLabelText('Email *'), { target: { value: 'jane@example.com' } });
+    
+    fireEvent.click(screen.getByRole('button', { name: /add patient/i }));
+    
+    expect(onSubmit).toHaveBeenCalledWith({
+      first_name: '',
+      last_name: 'Smith',
+      date_of_birth: '1985-05-20',
+      email: 'jane@example.com',
+      phone: '',
+      address: '',
+    });
+  });
+
+  it('allows submitting with optional first name', () => {
+    const onSubmit = vi.fn();
+    render(
+      <PatientForm
+        patient={null}
+        onSubmit={onSubmit}
+        onCancel={() => {}}
+      />
+    );
+    
+    fireEvent.change(screen.getByLabelText('First Name'), { target: { value: 'Jane' } });
+    fireEvent.change(screen.getByLabelText('Last Name *'), { target: { value: 'Smith' } });
+    fireEvent.change(screen.getByLabelText('Date of Birth *'), { target: { value: '1985-05-20' } });
+    fireEvent.change(screen.getByLabelText('Email *'), { target: { value: 'jane@example.com' } });
     
     fireEvent.click(screen.getByRole('button', { name: /add patient/i }));
     

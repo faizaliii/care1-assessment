@@ -35,17 +35,24 @@ function PatientForm({ patient, onSubmit, onCancel }: PatientFormProps) {
     }
   }, [patient]);
 
+  const validateEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
   const validate = (): boolean => {
     const newErrors: Partial<PatientFormData> = {};
     
-    if (!formData.first_name.trim()) {
-      newErrors.first_name = 'First name is required';
-    }
     if (!formData.last_name.trim()) {
       newErrors.last_name = 'Last name is required';
     }
     if (!formData.date_of_birth) {
       newErrors.date_of_birth = 'Date of birth is required';
+    }
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email is required';
+    } else if (!validateEmail(formData.email)) {
+      newErrors.email = 'Please enter a valid email address';
     }
     
     setErrors(newErrors);
@@ -73,7 +80,7 @@ function PatientForm({ patient, onSubmit, onCancel }: PatientFormProps) {
         <h2>{patient ? 'Edit Patient' : 'Add Patient'}</h2>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="first_name">First Name *</label>
+            <label htmlFor="first_name">First Name</label>
             <input
               type="text"
               id="first_name"
@@ -82,7 +89,6 @@ function PatientForm({ patient, onSubmit, onCancel }: PatientFormProps) {
               onChange={handleChange}
               autoFocus
             />
-            {errors.first_name && <span className="error">{errors.first_name}</span>}
           </div>
 
           <div className="form-group">
@@ -110,14 +116,16 @@ function PatientForm({ patient, onSubmit, onCancel }: PatientFormProps) {
           </div>
 
           <div className="form-group">
-            <label htmlFor="email">Email</label>
+            <label htmlFor="email">Email *</label>
             <input
-              type="email"
+              type="text"
               id="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
+              placeholder="email@example.com"
             />
+            {errors.email && <span className="error">{errors.email}</span>}
           </div>
 
           <div className="form-group">

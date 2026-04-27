@@ -37,10 +37,10 @@ class Patient(models.Model):
         on_delete=models.CASCADE,
         related_name='patients'
     )
-    first_name = models.CharField(max_length=100)
+    first_name = models.CharField(max_length=100, blank=True)
     last_name = models.CharField(max_length=100)
     date_of_birth = models.DateField()
-    email = models.EmailField(blank=True)
+    email = models.EmailField()
     phone = models.CharField(max_length=20, blank=True)
     address = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -50,11 +50,13 @@ class Patient(models.Model):
         ordering = ['last_name', 'first_name']
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name}"
+        name = f"{self.first_name} {self.last_name}".strip()
+        return name if name else self.email
 
     @property
     def full_name(self):
-        return f"{self.first_name} {self.last_name}"
+        name = f"{self.first_name} {self.last_name}".strip()
+        return name if name else self.email
 
 
 class Clinician(models.Model):

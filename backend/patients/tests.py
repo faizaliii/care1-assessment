@@ -26,15 +26,26 @@ class PatientModelTest(TestCase):
     def setUp(self):
         self.clinic = Clinic.objects.create(name="Test Clinic")
     
-    def test_patient_str_representation(self):
-        """Test string representation of Patient."""
+    def test_patient_str_representation_with_name(self):
+        """Test string representation of Patient with full name."""
         patient = Patient.objects.create(
             clinic=self.clinic,
             first_name="John",
             last_name="Doe",
-            date_of_birth=date(1990, 1, 1)
+            date_of_birth=date(1990, 1, 1),
+            email="john.doe@example.com"
         )
         self.assertEqual(str(patient), "John Doe")
+    
+    def test_patient_str_representation_without_first_name(self):
+        """Test string representation of Patient without first name."""
+        patient = Patient.objects.create(
+            clinic=self.clinic,
+            last_name="Doe",
+            date_of_birth=date(1990, 1, 1),
+            email="doe@example.com"
+        )
+        self.assertEqual(str(patient), "Doe")
     
     def test_patient_full_name_property(self):
         """Test full_name property of Patient."""
@@ -42,9 +53,20 @@ class PatientModelTest(TestCase):
             clinic=self.clinic,
             first_name="Jane",
             last_name="Smith",
-            date_of_birth=date(1985, 5, 15)
+            date_of_birth=date(1985, 5, 15),
+            email="jane.smith@example.com"
         )
         self.assertEqual(patient.full_name, "Jane Smith")
+    
+    def test_patient_full_name_without_first_name(self):
+        """Test full_name property when first_name is empty."""
+        patient = Patient.objects.create(
+            clinic=self.clinic,
+            last_name="Smith",
+            date_of_birth=date(1985, 5, 15),
+            email="smith@example.com"
+        )
+        self.assertEqual(patient.full_name, "Smith")
 
 
 class ClinicianModelTest(TestCase):
@@ -101,7 +123,8 @@ class PatientAPITest(APITestCase):
             clinic=self.clinic2,
             first_name="Jane",
             last_name="Smith",
-            date_of_birth=date(1985, 5, 20)
+            date_of_birth=date(1985, 5, 20),
+            email="jane.smith@example.com"
         )
         url = reverse('patient-list')
         response = self.client.get(url, {'clinic_id': self.clinic.id})
@@ -124,6 +147,32 @@ class PatientAPITest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Patient.objects.count(), 2)
         self.assertEqual(response.data['first_name'], 'Alice')
+    
+    def test_create_patient_without_first_name(self):
+        """Test creating a patient without first name (optional field)."""
+        url = reverse('patient-list')
+        data = {
+            'clinic': self.clinic.id,
+            'last_name': 'Wilson',
+            'date_of_birth': '1995-03-10',
+            'email': 'wilson@example.com',
+        }
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data['first_name'], '')
+    
+    def test_create_patient_missing_email(self):
+        """Test creating patient without email fails (required field)."""
+        url = reverse('patient-list')
+        data = {
+            'clinic': self.clinic.id,
+            'first_name': 'Test',
+            'last_name': 'User',
+            'date_of_birth': '1995-03-10',
+        }
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('email', response.data)
     
     def test_retrieve_patient(self):
         """Test retrieving a specific patient."""
@@ -276,7 +325,8 @@ class AppointmentAPITest(APITestCase):
             clinic=self.clinic,
             first_name="John",
             last_name="Doe",
-            date_of_birth=date(1990, 1, 1)
+            date_of_birth=date(1990, 1, 1),
+            email="john.doe@example.com"
         )
         self.clinician = Clinician.objects.create(
             clinic=self.clinic,
@@ -304,7 +354,8 @@ class AppointmentAPITest(APITestCase):
             clinic=self.clinic,
             first_name="Jane",
             last_name="Doe",
-            date_of_birth=date(1985, 5, 15)
+            date_of_birth=date(1985, 5, 15),
+            email="jane.doe@example.com"
         )
         Appointment.objects.create(
             patient=patient2,
