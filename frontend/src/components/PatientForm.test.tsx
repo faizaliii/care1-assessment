@@ -27,7 +27,7 @@ describe('PatientForm', () => {
       />
     );
     
-    expect(screen.getByText('Add Patient')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Add Patient' })).toBeInTheDocument();
     expect(screen.getByLabelText('First Name *')).toHaveValue('');
     expect(screen.getByLabelText('Last Name *')).toHaveValue('');
   });
@@ -41,7 +41,7 @@ describe('PatientForm', () => {
       />
     );
     
-    expect(screen.getByText('Edit Patient')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Edit Patient' })).toBeInTheDocument();
     expect(screen.getByLabelText('First Name *')).toHaveValue('John');
     expect(screen.getByLabelText('Last Name *')).toHaveValue('Doe');
     expect(screen.getByLabelText('Date of Birth *')).toHaveValue('1990-01-15');
@@ -58,7 +58,7 @@ describe('PatientForm', () => {
       />
     );
     
-    fireEvent.click(screen.getByText('Add Patient'));
+    fireEvent.click(screen.getByRole('button', { name: /add patient/i }));
     
     expect(screen.getByText('First name is required')).toBeInTheDocument();
     expect(screen.getByText('Last name is required')).toBeInTheDocument();
@@ -81,7 +81,7 @@ describe('PatientForm', () => {
     fireEvent.change(screen.getByLabelText('Date of Birth *'), { target: { value: '1985-05-20' } });
     fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'jane@example.com' } });
     
-    fireEvent.click(screen.getByText('Add Patient'));
+    fireEvent.click(screen.getByRole('button', { name: /add patient/i }));
     
     expect(onSubmit).toHaveBeenCalledWith({
       first_name: 'Jane',
