@@ -5,7 +5,9 @@
     "fields": {
       "name": "Downtown Medical Center",
       "address": "123 Main Street, Suite 100, New York, NY 10001",
-      "phone": "555-0100"
+      "phone": "555-0100",
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
     }
   },
   {
@@ -14,7 +16,9 @@
     "fields": {
       "name": "Westside Health Clinic",
       "address": "456 West Avenue, Los Angeles, CA 90001",
-      "phone": "555-0200"
+      "phone": "555-0200",
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
     }
   },
   {
@@ -25,7 +29,9 @@
       "first_name": "Sarah",
       "last_name": "Johnson",
       "specialty": "General Practice",
-      "email": "sarah.johnson@downtown.med"
+      "email": "sarah.johnson@downtown.med",
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
     }
   },
   {
@@ -36,7 +42,9 @@
       "first_name": "Michael",
       "last_name": "Chen",
       "specialty": "Cardiology",
-      "email": "michael.chen@downtown.med"
+      "email": "michael.chen@downtown.med",
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
     }
   },
   {
@@ -47,7 +55,9 @@
       "first_name": "Emily",
       "last_name": "Williams",
       "specialty": "Pediatrics",
-      "email": "emily.williams@westside.health"
+      "email": "emily.williams@westside.health",
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
     }
   },
   {
@@ -60,7 +70,9 @@
       "date_of_birth": "1985-03-15",
       "email": "john.smith@email.com",
       "phone": "555-1001",
-      "address": "789 Oak Street, Apt 4B, New York, NY 10002"
+      "address": "789 Oak Street, Apt 4B, New York, NY 10002",
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
     }
   },
   {
@@ -73,7 +85,9 @@
       "date_of_birth": "1992-07-22",
       "email": "maria.garcia@email.com",
       "phone": "555-1002",
-      "address": "321 Pine Avenue, New York, NY 10003"
+      "address": "321 Pine Avenue, New York, NY 10003",
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
     }
   },
   {
@@ -86,7 +100,9 @@
       "date_of_birth": "1978-11-30",
       "email": "david.lee@email.com",
       "phone": "555-2001",
-      "address": "555 Sunset Blvd, Los Angeles, CA 90002"
+      "address": "555 Sunset Blvd, Los Angeles, CA 90002",
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
     }
   }
 ]
